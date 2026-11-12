@@ -1,4 +1,13 @@
-import { MarketTicker, MarketNews, EconomicEvent, EarningsReport, HeatmapItem, Candle } from '../types/market';
+import {
+  MarketTicker,
+  MarketNews,
+  EconomicEvent,
+  EarningsReport,
+  HeatmapItem,
+  Candle,
+  Level2Item,
+  TradeTapeItem,
+} from '../types/market';
 
 export const INITIAL_TICKERS: MarketTicker[] = [
   // INDICES
@@ -14,6 +23,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '3.82B',
     sparkline: [5810, 5824, 5819, 5835, 5842, 5855, 5850, 5864],
     technicalRating: 'Strong Buy',
+    rsi: 64.2,
+    ath: 5882.0,
+    change1W: 1.45,
+    change1M: 3.82,
+    changeYTD: 22.4,
   },
   {
     symbol: 'NDX',
@@ -27,6 +41,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '5.14B',
     sparkline: [20390, 20420, 20460, 20510, 20580, 20610, 20645],
     technicalRating: 'Strong Buy',
+    rsi: 68.5,
+    ath: 20720.0,
+    change1W: 2.18,
+    change1M: 5.12,
+    changeYTD: 24.6,
   },
   {
     symbol: 'DJI',
@@ -40,6 +59,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '1.24B',
     sparkline: [43880, 43850, 43820, 43760, 43710, 43750, 43729],
     technicalRating: 'Neutral',
+    rsi: 52.8,
+    ath: 44200.0,
+    change1W: -0.42,
+    change1M: 1.85,
+    changeYTD: 15.2,
   },
   {
     symbol: 'RUT',
@@ -53,6 +77,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '2.11B',
     sparkline: [2322, 2328, 2335, 2330, 2342, 2348, 2345],
     technicalRating: 'Buy',
+    rsi: 58.1,
+    ath: 2450.0,
+    change1W: 1.12,
+    change1M: 4.25,
+    changeYTD: 14.8,
   },
   {
     symbol: 'DAX',
@@ -66,6 +95,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '820M',
     sparkline: [19310, 19340, 19370, 19400, 19430, 19448],
     technicalRating: 'Buy',
+    rsi: 56.4,
+    ath: 19670.0,
+    change1W: 0.85,
+    change1M: 2.15,
+    changeYTD: 16.2,
   },
   {
     symbol: 'N225',
@@ -79,6 +113,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '1.45B',
     sparkline: [39580, 39510, 39420, 39340, 39410, 39381],
     technicalRating: 'Neutral',
+    rsi: 51.2,
+    ath: 42400.0,
+    change1W: -0.65,
+    change1M: 1.40,
+    changeYTD: 18.1,
   },
 
   // STOCKS
@@ -99,6 +138,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Technology',
     sparkline: [143.5, 144.2, 146.0, 147.2, 146.8, 148.88],
     technicalRating: 'Strong Buy',
+    rsi: 71.4,
+    ath: 149.77,
+    change1W: 5.82,
+    change1M: 14.5,
+    changeYTD: 184.2,
   },
   {
     symbol: 'AAPL',
@@ -117,6 +161,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Technology',
     sparkline: [225.8, 226.4, 227.1, 226.9, 227.8, 228.24],
     technicalRating: 'Buy',
+    rsi: 59.2,
+    ath: 237.23,
+    change1W: 1.25,
+    change1M: 3.40,
+    changeYTD: 24.8,
   },
   {
     symbol: 'MSFT',
@@ -135,6 +184,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Technology',
     sparkline: [419.0, 420.5, 421.2, 421.9, 422.4, 422.99],
     technicalRating: 'Buy',
+    rsi: 57.8,
+    ath: 468.35,
+    change1W: 1.10,
+    change1M: 2.80,
+    changeYTD: 15.6,
   },
   {
     symbol: 'AMZN',
@@ -152,6 +206,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Consumer Cyclical',
     sparkline: [204.5, 205.8, 206.4, 207.1, 207.8, 208.18],
     technicalRating: 'Strong Buy',
+    rsi: 66.4,
+    ath: 214.10,
+    change1W: 3.42,
+    change1M: 8.90,
+    changeYTD: 38.4,
   },
   {
     symbol: 'GOOGL',
@@ -170,6 +229,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Communication',
     sparkline: [178.9, 179.8, 180.2, 180.9, 181.4, 181.75],
     technicalRating: 'Buy',
+    rsi: 61.2,
+    ath: 191.75,
+    change1W: 2.15,
+    change1M: 6.20,
+    changeYTD: 29.5,
   },
   {
     symbol: 'META',
@@ -188,6 +252,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Communication',
     sparkline: [579.5, 582.0, 584.5, 586.1, 588.0, 589.34],
     technicalRating: 'Strong Buy',
+    rsi: 67.8,
+    ath: 602.95,
+    change1W: 3.10,
+    change1M: 7.45,
+    changeYTD: 68.2,
   },
   {
     symbol: 'TSLA',
@@ -205,6 +274,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Consumer Cyclical',
     sparkline: [310.2, 316.5, 322.0, 325.4, 324.0, 328.49],
     technicalRating: 'Strong Buy',
+    rsi: 74.5,
+    ath: 414.50,
+    change1W: 9.80,
+    change1M: 32.4,
+    changeYTD: 34.2,
   },
   {
     symbol: 'AVGO',
@@ -223,6 +297,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Technology',
     sparkline: [176.8, 178.2, 179.5, 180.1, 181.0, 181.40],
     technicalRating: 'Buy',
+    rsi: 63.4,
+    ath: 185.16,
+    change1W: 4.10,
+    change1M: 9.20,
+    changeYTD: 62.4,
   },
   {
     symbol: 'JPM',
@@ -241,6 +320,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Financials',
     sparkline: [244.2, 243.8, 243.0, 242.4, 241.9, 242.15],
     technicalRating: 'Neutral',
+    rsi: 54.1,
+    ath: 248.50,
+    change1W: -0.85,
+    change1M: 4.10,
+    changeYTD: 42.1,
   },
   {
     symbol: 'LLY',
@@ -259,6 +343,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Healthcare',
     sparkline: [861.0, 856.2, 852.0, 848.5, 844.0, 846.50],
     technicalRating: 'Neutral',
+    rsi: 48.2,
+    ath: 972.53,
+    change1W: -2.40,
+    change1M: -3.80,
+    changeYTD: 46.5,
   },
   {
     symbol: 'PLTR',
@@ -276,6 +365,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Technology',
     sparkline: [56.8, 58.1, 59.4, 60.5, 60.2, 61.20],
     technicalRating: 'Strong Buy',
+    rsi: 81.2,
+    ath: 62.15,
+    change1W: 14.8,
+    change1M: 42.5,
+    changeYTD: 254.0,
   },
   {
     symbol: 'AMD',
@@ -293,6 +387,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Technology',
     sparkline: [150.5, 149.8, 148.5, 147.9, 146.8, 147.30],
     technicalRating: 'Neutral',
+    rsi: 44.5,
+    ath: 227.30,
+    change1W: -3.20,
+    change1M: -7.10,
+    changeYTD: 3.5,
   },
   {
     symbol: 'COIN',
@@ -310,6 +409,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     sector: 'Financials',
     sparkline: [292.5, 298.0, 304.5, 309.0, 311.2, 312.40],
     technicalRating: 'Strong Buy',
+    rsi: 78.4,
+    ath: 429.54,
+    change1W: 18.2,
+    change1M: 52.8,
+    changeYTD: 84.6,
   },
 
   // CRYPTO
@@ -326,6 +430,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$1.81T',
     sparkline: [87600, 88500, 89800, 90200, 91100, 91420],
     technicalRating: 'Strong Buy',
+    rsi: 76.5,
+    ath: 93400.0,
+    change1W: 8.4,
+    change1M: 38.2,
+    changeYTD: 118.5,
   },
   {
     symbol: 'ETHUSDT',
@@ -340,6 +449,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$407B',
     sparkline: [3250, 3290, 3320, 3345, 3370, 3385],
     technicalRating: 'Buy',
+    rsi: 65.4,
+    ath: 4891.0,
+    change1W: 6.2,
+    change1M: 26.4,
+    changeYTD: 48.2,
   },
   {
     symbol: 'SOLUSDT',
@@ -354,6 +468,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$102B',
     sparkline: [201.5, 206.0, 211.2, 215.0, 217.2, 218.45],
     technicalRating: 'Strong Buy',
+    rsi: 79.2,
+    ath: 260.06,
+    change1W: 14.2,
+    change1M: 44.8,
+    changeYTD: 112.0,
   },
   {
     symbol: 'BNBUSDT',
@@ -368,6 +487,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$93B',
     sparkline: [635, 638, 641, 643, 644, 645.2],
     technicalRating: 'Buy',
+    rsi: 61.4,
+    ath: 720.67,
+    change1W: 3.1,
+    change1M: 11.2,
+    changeYTD: 104.2,
   },
   {
     symbol: 'XRPUSDT',
@@ -382,6 +506,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$46.8B',
     sparkline: [0.73, 0.75, 0.78, 0.81, 0.82, 0.824],
     technicalRating: 'Strong Buy',
+    rsi: 84.1,
+    ath: 3.84,
+    change1W: 42.5,
+    change1M: 58.4,
+    changeYTD: 34.2,
   },
   {
     symbol: 'DOGEUSDT',
@@ -396,6 +525,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$56.4B',
     sparkline: [0.34, 0.355, 0.37, 0.38, 0.382, 0.385],
     technicalRating: 'Strong Buy',
+    rsi: 82.0,
+    ath: 0.737,
+    change1W: 38.4,
+    change1M: 180.2,
+    changeYTD: 310.0,
   },
   {
     symbol: 'AVAXUSDT',
@@ -410,6 +544,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$14.2B',
     sparkline: [32.1, 32.8, 33.4, 34.0, 34.3, 34.6],
     technicalRating: 'Buy',
+    rsi: 64.8,
+    ath: 146.22,
+    change1W: 11.5,
+    change1M: 22.8,
+    changeYTD: -12.4,
   },
   {
     symbol: 'LINKUSDT',
@@ -424,6 +563,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     marketCap: '$9.4B',
     sparkline: [14.0, 14.4, 14.8, 15.0, 15.1, 15.2],
     technicalRating: 'Buy',
+    rsi: 66.2,
+    ath: 52.88,
+    change1W: 14.2,
+    change1M: 28.5,
+    changeYTD: 2.4,
   },
 
   // FOREX
@@ -439,6 +583,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '280K lots',
     sparkline: [1.0580, 1.0570, 1.0555, 1.0548, 1.0538, 1.0542],
     technicalRating: 'Sell',
+    rsi: 38.2,
+    change1W: -0.85,
+    change1M: -3.20,
+    changeYTD: -4.40,
   },
   {
     symbol: 'GBPUSD',
@@ -452,6 +600,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '210K lots',
     sparkline: [1.2730, 1.2715, 1.2690, 1.2680, 1.2665, 1.2678],
     technicalRating: 'Sell',
+    rsi: 41.5,
+    change1W: -0.65,
+    change1M: -2.80,
+    changeYTD: -0.45,
   },
   {
     symbol: 'USDJPY',
@@ -465,6 +617,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '340K lots',
     sparkline: [153.8, 154.1, 154.4, 154.5, 154.8, 154.68],
     technicalRating: 'Strong Buy',
+    rsi: 68.2,
+    change1W: 1.45,
+    change1M: 4.80,
+    changeYTD: 9.80,
   },
   {
     symbol: 'USDCHF',
@@ -478,6 +634,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '140K lots',
     sparkline: [0.8830, 0.8845, 0.8855, 0.8860, 0.8870, 0.8864],
     technicalRating: 'Buy',
+    rsi: 61.2,
+    change1W: 0.95,
+    change1M: 3.10,
+    changeYTD: 5.20,
   },
   {
     symbol: 'AUDUSD',
@@ -491,6 +651,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '190K lots',
     sparkline: [0.6525, 0.6510, 0.6495, 0.6488, 0.6478, 0.6485],
     technicalRating: 'Sell',
+    rsi: 36.4,
+    change1W: -1.15,
+    change1M: -3.80,
+    changeYTD: -4.80,
   },
   {
     symbol: 'USDCAD',
@@ -504,6 +668,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '160K lots',
     sparkline: [1.3935, 1.3950, 1.3965, 1.3975, 1.3990, 1.3985],
     technicalRating: 'Buy',
+    rsi: 63.8,
+    change1W: 0.75,
+    change1M: 2.45,
+    changeYTD: 5.60,
   },
 
   // COMMODITIES
@@ -519,6 +687,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '185K contracts',
     sparkline: [2598, 2605, 2612, 2615, 2622, 2618.4],
     technicalRating: 'Buy',
+    rsi: 54.2,
+    ath: 2790.15,
+    change1W: 1.85,
+    change1M: -3.40,
+    changeYTD: 26.8,
   },
   {
     symbol: 'XAGUSD',
@@ -532,6 +705,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '88K contracts',
     sparkline: [30.6, 30.8, 31.0, 31.2, 31.3, 31.15],
     technicalRating: 'Buy',
+    rsi: 58.4,
+    ath: 49.80,
+    change1W: 2.45,
+    change1M: -4.80,
+    changeYTD: 31.2,
   },
   {
     symbol: 'USOIL',
@@ -545,6 +723,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '420K contracts',
     sparkline: [70.0, 69.6, 69.2, 68.9, 68.5, 68.75],
     technicalRating: 'Neutral',
+    rsi: 46.8,
+    ath: 130.50,
+    change1W: -2.10,
+    change1M: -5.40,
+    changeYTD: -4.2,
   },
   {
     symbol: 'UKOIL',
@@ -558,6 +741,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '310K contracts',
     sparkline: [73.8, 73.4, 73.1, 72.9, 72.6, 72.80],
     technicalRating: 'Neutral',
+    rsi: 47.1,
+    ath: 139.13,
+    change1W: -1.80,
+    change1M: -4.80,
+    changeYTD: -5.1,
   },
   {
     symbol: 'NGAS',
@@ -571,6 +759,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '145K contracts',
     sparkline: [2.79, 2.82, 2.85, 2.87, 2.91, 2.89],
     technicalRating: 'Strong Buy',
+    rsi: 64.5,
+    ath: 10.02,
+    change1W: 6.80,
+    change1M: 14.5,
+    changeYTD: 15.2,
   },
   {
     symbol: 'HG1!',
@@ -584,6 +777,11 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '62K contracts',
     sparkline: [4.09, 4.11, 4.12, 4.15, 4.16, 4.14],
     technicalRating: 'Buy',
+    rsi: 52.8,
+    ath: 5.20,
+    change1W: 0.85,
+    change1M: -3.20,
+    changeYTD: 6.8,
   },
 
   // BONDS
@@ -599,6 +797,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '--',
     sparkline: [4.40, 4.41, 4.42, 4.44, 4.45, 4.442],
     technicalRating: 'Buy',
+    rsi: 62.4,
+    change1W: 0.08,
+    change1M: 0.24,
+    changeYTD: 0.56,
   },
   {
     symbol: 'US02Y',
@@ -612,6 +814,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '--',
     sparkline: [4.29, 4.30, 4.305, 4.31, 4.32, 4.315],
     technicalRating: 'Neutral',
+    rsi: 57.1,
+    change1W: 0.05,
+    change1M: 0.28,
+    changeYTD: 0.06,
   },
   {
     symbol: 'US30Y',
@@ -625,6 +831,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '--',
     sparkline: [4.58, 4.59, 4.60, 4.61, 4.62, 4.618],
     technicalRating: 'Buy',
+    rsi: 64.2,
+    change1W: 0.09,
+    change1M: 0.22,
+    changeYTD: 0.58,
   },
   {
     symbol: 'DE10Y',
@@ -638,6 +848,10 @@ export const INITIAL_TICKERS: MarketTicker[] = [
     volume: '--',
     sparkline: [2.40, 2.395, 2.39, 2.38, 2.375, 2.385],
     technicalRating: 'Sell',
+    rsi: 46.8,
+    change1W: -0.04,
+    change1M: 0.12,
+    changeYTD: 0.36,
   },
 ];
 
@@ -816,18 +1030,17 @@ export const MOCK_EARNINGS: EarningsReport[] = [
 ];
 
 // Helper to generate realistic candles for interactive charts
-export function generateCandles(basePrice: number, count: number = 60, volatility: number = 0.015): Candle[] {
+export function generateCandles(basePrice: number, count: number = 75, volatility: number = 0.015): Candle[] {
   const candles: Candle[] = [];
   let currentPrice = basePrice * (1 - volatility * (count / 4));
   const now = Date.now();
-  const timeStep = 15 * 60 * 1000; // 15m default
+  const timeStep = 15 * 60 * 1000;
 
   for (let i = 0; i < count; i++) {
     const timestamp = now - (count - i) * timeStep;
     const dateObj = new Date(timestamp);
     const timeStr = `${dateObj.getHours().toString().padStart(2, '0')}:${dateObj.getMinutes().toString().padStart(2, '0')}`;
     
-    // random delta with slight upward bias
     const change = (Math.random() - 0.48) * currentPrice * volatility;
     const open = currentPrice;
     const close = Math.max(open + change, open * 0.85);
@@ -848,7 +1061,6 @@ export function generateCandles(basePrice: number, count: number = 60, volatilit
     currentPrice = close;
   }
 
-  // Adjust last candle close to match current base price
   if (candles.length > 0) {
     const last = candles[candles.length - 1];
     last.close = basePrice;
@@ -857,4 +1069,52 @@ export function generateCandles(basePrice: number, count: number = 60, volatilit
   }
 
   return candles;
+}
+
+// Generate realistic Level 2 Order Book Depth
+export function generateLevel2Book(currentPrice: number): { bids: Level2Item[]; asks: Level2Item[]; spread: number } {
+  const step = currentPrice > 1000 ? 1.5 : currentPrice > 50 ? 0.05 : 0.01;
+  const bids: Level2Item[] = [];
+  const asks: Level2Item[] = [];
+  
+  let cumBid = 0;
+  for (let i = 1; i <= 6; i++) {
+    const price = Number((currentPrice - i * step).toFixed(2));
+    const size = Math.floor(Math.random() * 800 + 120);
+    cumBid += size;
+    bids.push({ price, size, total: cumBid });
+  }
+
+  let cumAsk = 0;
+  for (let i = 1; i <= 6; i++) {
+    const price = Number((currentPrice + i * step).toFixed(2));
+    const size = Math.floor(Math.random() * 800 + 120);
+    cumAsk += size;
+    asks.push({ price, size, total: cumAsk });
+  }
+
+  const spread = Number((asks[0].price - bids[0].price).toFixed(2));
+  return { bids, asks, spread };
+}
+
+// Generate real-time Time & Sales trade tape
+export function generateTradeTape(currentPrice: number): TradeTapeItem[] {
+  const items: TradeTapeItem[] = [];
+  const now = new Date();
+  for (let i = 0; i < 7; i++) {
+    const secAgo = new Date(now.getTime() - i * 3000);
+    const time = `${secAgo.getHours().toString().padStart(2, '0')}:${secAgo.getMinutes().toString().padStart(2, '0')}:${secAgo.getSeconds().toString().padStart(2, '0')}`;
+    const side = Math.random() > 0.45 ? 'buy' : 'sell';
+    const delta = (Math.random() - 0.5) * (currentPrice * 0.001);
+    const price = Number((currentPrice + delta).toFixed(2));
+    const size = Math.floor(Math.random() * 500 + 20);
+    items.push({
+      id: `trade-${i}-${Date.now()}`,
+      time,
+      price,
+      size,
+      side,
+    });
+  }
+  return items;
 }

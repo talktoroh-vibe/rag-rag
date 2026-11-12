@@ -1,4 +1,4 @@
-export type AssetClass = 'all' | 'stocks' | 'crypto' | 'forex' | 'indices' | 'commodities' | 'bonds' | 'heatmap';
+export type AssetClass = 'all' | 'stocks' | 'crypto' | 'forex' | 'indices' | 'commodities' | 'bonds' | 'heatmap' | 'portfolio' | 'macro';
 
 export type Currency = 'USD' | 'EUR' | 'GBP' | 'JPY';
 
@@ -20,6 +20,11 @@ export interface MarketTicker {
   country?: string;
   sparkline: number[];
   technicalRating: 'Strong Buy' | 'Buy' | 'Neutral' | 'Sell' | 'Strong Sell';
+  rsi?: number;
+  ath?: number;
+  change1W?: number;
+  change1M?: number;
+  changeYTD?: number;
   lastUpdated?: number;
 }
 
@@ -61,7 +66,7 @@ export interface EarningsReport {
   symbol: string;
   name: string;
   reportDate: string;
-  timing: 'BMO' | 'AMC'; // Before Market Open / After Market Close
+  timing: 'BMO' | 'AMC';
   epsEstimate: number;
   epsReported?: number;
   revenueEstimate: string;
@@ -81,4 +86,40 @@ export interface WatchlistItem {
   symbol: string;
   addedAt: number;
   alertPrice?: number;
+}
+
+export interface PortfolioPosition {
+  id: string;
+  symbol: string;
+  shares: number;
+  avgPrice: number;
+  currentPrice: number;
+  unrealizedPnl: number;
+  unrealizedPnlPercent: number;
+  timestamp: number;
+}
+
+export interface TradeOrder {
+  id: string;
+  symbol: string;
+  side: 'buy' | 'sell';
+  type: 'market' | 'limit';
+  shares: number;
+  price: number;
+  status: 'filled' | 'cancelled';
+  timestamp: number;
+}
+
+export interface Level2Item {
+  price: number;
+  size: number;
+  total: number;
+}
+
+export interface TradeTapeItem {
+  id: string;
+  time: string;
+  price: number;
+  size: number;
+  side: 'buy' | 'sell';
 }

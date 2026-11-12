@@ -9,11 +9,12 @@ import { ForexScreen } from './components/screens/ForexScreen';
 import { IndicesScreen } from './components/screens/IndicesScreen';
 import { CommoditiesScreen } from './components/screens/CommoditiesScreen';
 import { BondsScreen } from './components/screens/BondsScreen';
+import { PortfolioScreen } from './components/screens/PortfolioScreen';
+import { MacroScreen } from './components/screens/MacroScreen';
 import { MarketHeatmap } from './components/MarketHeatmap';
 import { InteractiveChartModal } from './components/InteractiveChartModal';
 import { WatchlistDrawer } from './components/WatchlistDrawer';
 import { SearchModal } from './components/SearchModal';
-import { ShieldCheck, Clock, Globe } from 'lucide-react';
 
 const MainContent: React.FC = () => {
   const { activeAssetClass, selectedTicker, setSelectedTicker } = useMarket();
@@ -34,6 +35,10 @@ const MainContent: React.FC = () => {
         return <BondsScreen />;
       case 'heatmap':
         return <MarketHeatmap />;
+      case 'portfolio':
+        return <PortfolioScreen />;
+      case 'macro':
+        return <MacroScreen />;
       case 'all':
       default:
         return <OverviewScreen />;
@@ -53,15 +58,15 @@ const MainContent: React.FC = () => {
         {renderActiveScreen()}
       </main>
 
-      {/* Financial Market Status & Footer */}
-      <footer className="w-full bg-[#131722] border-t border-[#2a2e39] py-6 px-4 lg:px-6 select-none text-xs text-[#787b86]">
+      {/* Financial Market Status & Institutional Footer */}
+      <footer className="w-full bg-[#131722] border-t border-[#2a2e39] py-5 px-4 lg:px-6 select-none text-xs text-[#787b86]">
         <div className="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
           {/* Market Trading Session Badges */}
           <div className="flex flex-wrap items-center gap-4">
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#089981]" />
               <span className="font-semibold text-white">NYSE / NASDAQ:</span>
-              <span>Open</span>
+              <span className="text-[#089981]">Open</span>
             </div>
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#787b86]" />
@@ -76,20 +81,20 @@ const MainContent: React.FC = () => {
             <div className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-[#089981]" />
               <span className="font-semibold text-white">Crypto 24/7:</span>
-              <span>Active</span>
+              <span className="text-[#089981]">Active</span>
             </div>
           </div>
 
-          {/* Legal / Copyright */}
+          {/* Legal / Terminal Notice */}
           <div className="flex items-center gap-2">
-            <span>TradingView Markets Overview</span>
+            <span>TradingView Pro Terminal</span>
             <span>·</span>
-            <span>Financial market data real-time simulation</span>
+            <span>Real-time market data simulation & paper execution</span>
           </div>
         </div>
       </footer>
 
-      {/* Chart Modal */}
+      {/* Pro Chart Modal */}
       {selectedTicker && (
         <InteractiveChartModal
           ticker={selectedTicker}

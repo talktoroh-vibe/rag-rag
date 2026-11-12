@@ -11,6 +11,8 @@ import {
   Calendar,
   Layers,
   SlidersHorizontal,
+  Download,
+  CheckCircle2,
 } from 'lucide-react';
 
 export const StocksScreen: React.FC = () => {
@@ -18,7 +20,9 @@ export const StocksScreen: React.FC = () => {
 
   const [search, setSearch] = useState('');
   const [selectedSector, setSelectedSector] = useState('All');
-  const [sortBy, setSortBy] = useState<'marketCap' | 'changePercent' | 'volume' | 'peRatio'>('marketCap');
+  const [filterPreset, setFilterPreset] = useState<'all' | 'megaCap' | 'oversold' | 'overbought' | 'ath'>('all');
+  const [sortBy, setSortBy] = useState<'marketCap' | 'changePercent' | 'change1W' | 'change1M' | 'changeYTD' | 'peRatio' | 'rsi'>('marketCap');
+  const [exportNotice, setExportNotice] = useState<string | null>(null);
 
   const stockTickers = useMemo(() => {
     return tickers.filter((t) => t.assetClass === 'stocks');
@@ -33,29 +37,67 @@ export const StocksScreen: React.FC = () => {
         const matchesSearch =
           s.symbol.toLowerCase().includes(search.toLowerCase()) ||
           s.name.toLowerCase().includes(search.toLowerCase());
-        return matchesSector && matchesSearch;
+
+        let matchesPreset = true;
+        if (filterPreset === 'megaCap') {
+          matchesPreset = s.marketCap?.includes('T') || false;
+        } else if (filterPreset === 'oversold') {
+          matchesPreset = (s.rsi || 50) < 45;
+        } else if (filterPreset === 'overbought') {
+          matchesPreset = (s.rsi || 50) > 70;
+        } else if (filterPreset === 'ath') {
+          matchesPreset = s.ath ? (s.price / s.ath) >= 0.95 : false;
+        }
+
+        return matchesSector && matchesSearch && matchesPreset;
       })
       .sort((a, b) => {
         if (sortBy === 'changePercent') return b.changePercent - a.changePercent;
+        if (sortBy === 'change1W') return (b.change1W || 0) - (a.change1W || 0);
+        if (sortBy === 'change1M') return (b.change1M || 0) - (a.change1M || 0);
+        if (sortBy === 'changeYTD') return (b.changeYTD || 0) - (a.changeYTD || 0);
+        if (sortBy === 'rsi') return (b.rsi || 0) - (a.rsi || 0);
         if (sortBy === 'peRatio') return (b.peRatio || 0) - (a.peRatio || 0);
-        if (sortBy === 'volume') return parseFloat(b.volume) - parseFloat(a.volume);
+        
         // default market cap
-        const capA = parseFloat(a.marketCap?.replace(/[^0-9.]/g, '') || '0');
-        const capB = parseFloat(b.marketCap?.replace(/[^0-9.]/g, '') || '0');
+        const capA = parseFloat(a.marketCap?.replace(/[^0-9.]/g, '') || '0') * (a.marketCap?.includes('T') ? 1000 : 1);
+        const capB = parseFloat(b.marketCap?.replace(/[^0-9.]/g, '') || '0') * (b.marketCap?.includes('T') ? 1000 : 1);
         return capB - capA;
       });
-  }, [stockTickers, selectedSector, search, sortBy]);
+  }, [stockTickers, selectedSector, search, filterPreset, sortBy]);
+
+  const handleExportCSV = () => {
+    const headers = ['Symbol,Name,Price,ChangePct,1W_Pct,1M_Pct,YTD_Pct,MarketCap,PE,RSI,Rating\n'];
+    const rows = filteredStocks.map(
+      (s) =>
+        `${s.symbol},"${s.name}",${s.price},${s.changePercent}%,${s.change1W || 0}%,${s.change1M || 0}%,${s.changeYTD || 0}%,${s.marketCap || ''},${s.peRatio || ''},${s.rsi || ''},${s.technicalRating}`
+    );
+    const blob = new Blob([headers.concat(rows.join('\n')).join('')], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `TradingView_Stock_Screener_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    setExportNotice('Exported screener CSV successfully!');
+    setTimeout(() => setExportNotice(null), 3000);
+  };
 
   return (
     <div className="space-y-6">
       {/* Header and Filter Controls */}
       <div className="p-5 rounded-xl bg-[#1e222d] border border-[#2a2e39] flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h1 className="text-lg font-bold text-white tracking-wide">
-            Global Stocks Screener
-          </h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-lg font-bold text-white tracking-wide">
+              Global Equities Screener
+            </h1>
+            <span className="text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-[#2962ff]/20 text-[#2962ff] border border-[#2962ff]/30">
+              PRO
+            </span>
+          </div>
           <p className="text-xs text-[#787b86]">
-            Real-time equity quotes, technical indicators, and fundamental metrics
+            Real-time multi-period returns, valuation multiples, RSI oscillator, and ATH metrics
           </p>
         </div>
 
@@ -72,23 +114,68 @@ export const StocksScreen: React.FC = () => {
             />
           </div>
 
-          {/* Sector filter */}
-          <div className="flex items-center gap-1 overflow-x-auto scrollbar-none text-xs">
-            {sectors.map((sec) => (
-              <button
-                key={sec}
-                onClick={() => setSelectedSector(sec)}
-                className={`px-3 py-1.5 rounded transition-colors whitespace-nowrap ${
-                  selectedSector === sec
-                    ? 'bg-[#2962ff] text-white font-medium'
-                    : 'text-[#787b86] hover:text-white bg-[#131722] border border-[#2a2e39]'
-                }`}
-              >
-                {sec}
-              </button>
-            ))}
-          </div>
+          {/* Export to CSV */}
+          <button
+            onClick={handleExportCSV}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#131722] hover:bg-[#2a2e39] text-xs text-white border border-[#2a2e39] transition-colors"
+            title="Download CSV"
+          >
+            <Download className="w-3.5 h-3.5 text-[#2962ff]" />
+            <span>Export CSV</span>
+          </button>
         </div>
+      </div>
+
+      {exportNotice && (
+        <div className="p-3 bg-[#089981]/15 border border-[#089981]/30 text-[#089981] text-xs font-semibold rounded-lg flex items-center gap-2">
+          <CheckCircle2 className="w-4 h-4" />
+          {exportNotice}
+        </div>
+      )}
+
+      {/* Preset Filters Strip */}
+      <div className="flex flex-wrap items-center gap-2 text-xs">
+        <span className="text-[#787b86] font-medium mr-1">Pro Presets:</span>
+        <button
+          onClick={() => setFilterPreset('all')}
+          className={`px-3 py-1 rounded transition-colors ${
+            filterPreset === 'all' ? 'bg-[#2962ff] text-white font-medium' : 'bg-[#1e222d] text-[#787b86] hover:text-white border border-[#2a2e39]'
+          }`}
+        >
+          All Equities ({stockTickers.length})
+        </button>
+        <button
+          onClick={() => setFilterPreset('megaCap')}
+          className={`px-3 py-1 rounded transition-colors ${
+            filterPreset === 'megaCap' ? 'bg-[#2962ff] text-white font-medium' : 'bg-[#1e222d] text-[#787b86] hover:text-white border border-[#2a2e39]'
+          }`}
+        >
+          Trillion Dollar Club (&gt; $1T)
+        </button>
+        <button
+          onClick={() => setFilterPreset('oversold')}
+          className={`px-3 py-1 rounded transition-colors ${
+            filterPreset === 'oversold' ? 'bg-[#2962ff] text-white font-medium' : 'bg-[#1e222d] text-[#787b86] hover:text-white border border-[#2a2e39]'
+          }`}
+        >
+          RSI Oversold (&lt;45)
+        </button>
+        <button
+          onClick={() => setFilterPreset('overbought')}
+          className={`px-3 py-1 rounded transition-colors ${
+            filterPreset === 'overbought' ? 'bg-[#2962ff] text-white font-medium' : 'bg-[#1e222d] text-[#787b86] hover:text-white border border-[#2a2e39]'
+          }`}
+        >
+          Momentum Overbought (&gt;70)
+        </button>
+        <button
+          onClick={() => setFilterPreset('ath')}
+          className={`px-3 py-1 rounded transition-colors ${
+            filterPreset === 'ath' ? 'bg-[#2962ff] text-white font-medium' : 'bg-[#1e222d] text-[#787b86] hover:text-white border border-[#2a2e39]'
+          }`}
+        >
+          Near 52W High (&lt;5% off ATH)
+        </button>
       </div>
 
       {/* Main Stock Table */}
@@ -99,14 +186,50 @@ export const StocksScreen: React.FC = () => {
               <tr className="border-b border-[#2a2e39] text-[#787b86] font-medium">
                 <th className="pb-3 font-semibold">Ticker / Company</th>
                 <th className="pb-3 text-right font-semibold">Price</th>
-                <th className="pb-3 text-right font-semibold">Change</th>
-                <th className="pb-3 text-right font-semibold">Change %</th>
-                <th className="pb-3 text-right font-semibold">Market Cap</th>
-                <th className="pb-3 text-right font-semibold hidden md:table-cell">P/E Ratio</th>
-                <th className="pb-3 text-right font-semibold hidden lg:table-cell">EPS</th>
-                <th className="pb-3 text-right font-semibold hidden sm:table-cell">Volume</th>
+                <th
+                  onClick={() => setSortBy('changePercent')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white"
+                >
+                  Day Chg % {sortBy === 'changePercent' ? '▼' : ''}
+                </th>
+                <th
+                  onClick={() => setSortBy('change1W')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white hidden sm:table-cell"
+                >
+                  1-Week {sortBy === 'change1W' ? '▼' : ''}
+                </th>
+                <th
+                  onClick={() => setSortBy('change1M')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white hidden md:table-cell"
+                >
+                  1-Month {sortBy === 'change1M' ? '▼' : ''}
+                </th>
+                <th
+                  onClick={() => setSortBy('changeYTD')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white hidden lg:table-cell"
+                >
+                  YTD {sortBy === 'changeYTD' ? '▼' : ''}
+                </th>
+                <th
+                  onClick={() => setSortBy('marketCap')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white"
+                >
+                  Market Cap {sortBy === 'marketCap' ? '▼' : ''}
+                </th>
+                <th
+                  onClick={() => setSortBy('peRatio')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white hidden md:table-cell"
+                >
+                  P/E {sortBy === 'peRatio' ? '▼' : ''}
+                </th>
+                <th
+                  onClick={() => setSortBy('rsi')}
+                  className="pb-3 text-right font-semibold cursor-pointer hover:text-white hidden xl:table-cell"
+                >
+                  RSI(14) {sortBy === 'rsi' ? '▼' : ''}
+                </th>
                 <th className="pb-3 text-right font-semibold hidden md:table-cell">Technical Rating</th>
-                <th className="pb-3 text-center font-semibold w-24">7-Day Trend</th>
+                <th className="pb-3 text-center font-semibold w-24">Trend</th>
                 <th className="pb-3 text-right font-semibold w-10"></th>
               </tr>
             </thead>
@@ -145,15 +268,6 @@ export const StocksScreen: React.FC = () => {
                       {formatPrice(stock.price, stock.symbol)}
                     </td>
 
-                    <td
-                      className={`py-3.5 text-right font-mono font-medium tabular-nums ${
-                        isUp ? 'text-[#089981]' : 'text-[#f23645]'
-                      }`}
-                    >
-                      {isUp ? '+' : ''}
-                      {stock.change.toFixed(2)}
-                    </td>
-
                     <td className="py-3.5 text-right font-mono tabular-nums">
                       <span
                         className={`inline-block px-2 py-0.5 rounded text-[11px] font-bold ${
@@ -165,6 +279,24 @@ export const StocksScreen: React.FC = () => {
                       </span>
                     </td>
 
+                    <td className="py-3.5 text-right font-mono tabular-nums hidden sm:table-cell">
+                      <span className={stock.change1W && stock.change1W >= 0 ? 'text-[#089981]' : 'text-[#f23645]'}>
+                        {stock.change1W ? `${stock.change1W > 0 ? '+' : ''}${stock.change1W.toFixed(1)}%` : '--'}
+                      </span>
+                    </td>
+
+                    <td className="py-3.5 text-right font-mono tabular-nums hidden md:table-cell">
+                      <span className={stock.change1M && stock.change1M >= 0 ? 'text-[#089981]' : 'text-[#f23645]'}>
+                        {stock.change1M ? `${stock.change1M > 0 ? '+' : ''}${stock.change1M.toFixed(1)}%` : '--'}
+                      </span>
+                    </td>
+
+                    <td className="py-3.5 text-right font-mono tabular-nums hidden lg:table-cell">
+                      <span className={stock.changeYTD && stock.changeYTD >= 0 ? 'text-[#089981] font-semibold' : 'text-[#f23645] font-semibold'}>
+                        {stock.changeYTD ? `${stock.changeYTD > 0 ? '+' : ''}${stock.changeYTD.toFixed(1)}%` : '--'}
+                      </span>
+                    </td>
+
                     <td className="py-3.5 text-right font-mono text-white tabular-nums">
                       {stock.marketCap}
                     </td>
@@ -173,12 +305,18 @@ export const StocksScreen: React.FC = () => {
                       {stock.peRatio ? stock.peRatio.toFixed(1) : '--'}
                     </td>
 
-                    <td className="py-3.5 text-right font-mono text-[#9598a1] hidden lg:table-cell tabular-nums">
-                      ${stock.eps ? stock.eps.toFixed(2) : '--'}
-                    </td>
-
-                    <td className="py-3.5 text-right font-mono text-[#787b86] hidden sm:table-cell tabular-nums">
-                      {stock.volume}
+                    <td className="py-3.5 text-right font-mono text-white hidden xl:table-cell tabular-nums">
+                      <span
+                        className={`px-1.5 py-0.5 rounded ${
+                          (stock.rsi || 50) > 70
+                            ? 'bg-[#f23645]/20 text-[#f23645] font-bold'
+                            : (stock.rsi || 50) < 45
+                            ? 'bg-[#089981]/20 text-[#089981] font-bold'
+                            : 'text-[#9598a1]'
+                        }`}
+                      >
+                        {stock.rsi?.toFixed(1) || '55.0'}
+                      </span>
                     </td>
 
                     <td className="py-3.5 text-right hidden md:table-cell">
