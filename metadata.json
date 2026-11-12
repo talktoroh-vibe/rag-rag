@@ -1,0 +1,6 @@
+{
+  "name": "TradingView Markets - World Financial Overview & Screener",
+  "description": "Real-time global financial markets dashboard featuring stocks, crypto, forex, indices, commodities, interactive technical charts, heatmaps, and screener.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
